@@ -270,10 +270,10 @@ def health_check():
 @app.route('/api/asl-letters', methods=['GET'])
 def get_asl_letters():
     return jsonify({'letters': list(asl_recognizer.asl_patterns.keys())}), 200
-
+    
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    socketio.run(app, debug=False, host='0.0.0.0', port=port)
+    socketio.run(app, debug=False, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)
     
 import threading, requests, time
 
