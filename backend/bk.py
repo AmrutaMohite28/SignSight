@@ -24,15 +24,21 @@ logger = logging.getLogger(__name__)
 #                           (MediaPipe Hand Tracking Logic)
 # ==================================================================================
 
-mp_hands = mp.solutions.hands
-# FIX: static_image_mode=True केल्यामुळे "Timestamp Mismatch" एरर येत नाही.
-hands = mp_hands.Hands(
-    static_image_mode=False,  
-    max_num_hands=2,
-    min_detection_confidence=0.5,
-    min_tracking_confidence=0.5
-)
-mp_drawing = mp.solutions.drawing_utils
+try:
+    mp_hands = mp.solutions.hands
+    hands = mp_hands.Hands(
+        static_image_mode=True,
+        max_num_hands=2,
+        min_detection_confidence=0.5,
+        min_tracking_confidence=0.5
+    )
+    mp_drawing = mp.solutions.drawing_utils
+    logger.info("✅ MediaPipe loaded successfully!")
+except Exception as e:
+    logger.error(f"⚠️ MediaPipe error: {e}")
+    mp_hands = None
+    hands = None
+    mp_drawing = None
 processing_lock = Lock() # Lock मुळे सिस्टम क्रॅश होत नाही
 
 # ASL Recognition Dictionary (A-Z Logic)
