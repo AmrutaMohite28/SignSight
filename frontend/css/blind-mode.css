@@ -1,0 +1,417 @@
+/* ============================================
+   BLIND MODE - HIGH CONTRAST & LARGE BUTTONS
+   ============================================ */
+
+/* Override body for blind mode */
+body {
+    background: #000000 !important;
+    color: #FFFF00 !important;
+}
+
+/* Blind Container */
+.blind-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 20px 100px 20px;
+    min-height: 100vh;
+    background: #000000;
+}
+
+/* Header */
+.blind-header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 30px;
+    background: #1a1a1a;
+    border: 3px solid #FFFF00;
+    border-radius: 15px;
+}
+
+.blind-header h1 {
+    color: #FFFF00;
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.blind-header p {
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Voice Section */
+.voice-section {
+    margin-bottom: 60px;
+}
+
+.voice-indicator {
+    text-align: center;
+    padding: 30px;
+    background: #1a1a1a;
+    border: 3px solid #FFFF00;
+    border-radius: 15px;
+    margin-bottom: 40px;
+}
+
+.microphone-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    display: inline-block;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+#voiceStatus {
+    color: #FFFF00;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ===== LARGE CONTROL BUTTONS (4 QUADRANTS) ===== */
+.control-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    height: 600px;
+    margin-bottom: 40px;
+}
+
+.control-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid #FFFF00;
+    border-radius: 20px;
+    background: #1a1a1a;
+    color: #FFFF00;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 40px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+}
+
+.control-button:hover,
+.control-button:focus {
+    background: #FFFF00;
+    color: #000000;
+    transform: scale(1.05);
+    outline: none;
+    box-shadow: 0 0 20px #FFFF00;
+}
+
+.control-button:active {
+    transform: scale(0.95);
+}
+
+/* Button Icons */
+.btn-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.btn-text {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* Position Classes */
+.tl-btn {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.tr-btn {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.bl-btn {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.br-btn {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+/* ===== TEXT DISPLAY SECTION ===== */
+.text-display-section {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: #1a1a1a;
+    border: 3px solid #FFFF00;
+    border-radius: 15px;
+}
+
+.text-box {
+    background: #000000;
+    border: 2px solid #FFFF00;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#recognizedText {
+    color: #FFFF00;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+/* Audio Controls */
+.audio-controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.audio-btn {
+    padding: 18px 40px;
+    border: 3px solid #FFFF00;
+    border-radius: 10px;
+    background: #000000;
+    color: #FFFF00;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.audio-btn:hover,
+.audio-btn:focus {
+    background: #FFFF00;
+    color: #000000;
+    outline: none;
+    box-shadow: 0 0 20px #FFFF00;
+}
+
+.audio-btn:active {
+    transform: scale(0.95);
+}
+
+/* ===== FEEDBACK SECTION ===== */
+.feedback-section {
+    padding: 20px;
+    background: #1a1a1a;
+    border: 3px solid #FFFF00;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.feedback-message {
+    color: #00FF00;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    display: none;
+}
+
+.confidence-display {
+    color: #FFFF00;
+    font-size: 18px;
+    font-weight: 600;
+    min-height: 30px;
+}
+
+/* ===== CAMERA CONTAINER (HIDDEN) ===== */
+.camera-container {
+    display: none;
+    margin-bottom: 20px;
+}
+
+#cameraFeed {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* ===== SOS BUTTON ===== */
+.sos-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #FF0000;
+    border: 4px solid #FFFF00;
+    color: #FFFF00;
+    font-weight: 700;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 0 30px #FF0000;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    animation: sosPulse 1s infinite;
+    font-family: 'Inter', sans-serif;
+}
+
+.sos-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 50px #FF0000;
+}
+
+.sos-btn:active {
+    transform: scale(0.9);
+}
+
+@keyframes sosPulse {
+    0%, 100% {
+        box-shadow: 0 0 30px #FF0000;
+    }
+    50% {
+        box-shadow: 0 0 60px #FF0000;
+    }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+    .control-grid {
+        height: 500px;
+        gap: 15px;
+    }
+
+    .control-button {
+        padding: 30px;
+    }
+
+    .btn-icon {
+        font-size: 60px;
+    }
+
+    .btn-text {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .blind-container {
+        padding: 100px 15px 100px 15px;
+    }
+
+    .blind-header h1 {
+        font-size: 28px;
+    }
+
+    .blind-header p {
+        font-size: 16px;
+    }
+
+    .control-grid {
+        height: 400px;
+        gap: 12px;
+    }
+
+    .control-button {
+        padding: 20px;
+        border: 3px solid #FFFF00;
+    }
+
+    .btn-icon {
+        font-size: 50px;
+        margin-bottom: 15px;
+    }
+
+    .btn-text {
+        font-size: 16px;
+    }
+
+    #recognizedText {
+        font-size: 24px;
+    }
+
+    .audio-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .audio-btn {
+        width: 100%;
+        padding: 15px 30px;
+        font-size: 16px;
+    }
+
+    .sos-btn {
+        width: 80px;
+        height: 80px;
+        font-size: 20px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .control-grid {
+        height: 300px;
+        gap: 10px;
+    }
+
+    .control-button {
+        padding: 15px;
+    }
+
+    .btn-icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+    .btn-text {
+        font-size: 14px;
+    }
+
+    .microphone-icon {
+        font-size: 60px;
+    }
+
+    #voiceStatus {
+        font-size: 16px;
+    }
+
+    .text-box {
+        padding: 20px;
+        min-height: 80px;
+    }
+
+    #recognizedText {
+        font-size: 20px;
+    }
+
+    .audio-btn {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+
+    .feedback-message {
+        font-size: 16px;
+    }
+
+    .confidence-display {
+        font-size: 14px;
+    }
+
+    .sos-btn {
+        width: 70px;
+        height: 70px;
+        font-size: 18px;
+    }
+}

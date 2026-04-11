@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignSight Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
+
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <aside class="sidebar collapsed" id="sidebar">
+            <div class="sidebar-header">
+                <button class="menu-btn" id="menu-btn">☰</button>
+            </div>
+            
+            <div class="sidebar-content">
+                <div class="sidebar-item">
+                    <span class="item-icon">🔥</span>
+                    <div class="item-text">
+                        <span class="stat-title">Current Streak</span>
+                        <span class="stat-val" id="sidebarStreak"></span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-item">
+                    <span class="item-icon">⏱️</span>
+                    <div class="item-text">
+                        <span class="stat-title">Time Spent Today</span>
+                        <span class="stat-val" id="timeSpent"></span>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <span class="item-icon">🎯</span>
+                    <div class="item-text progress-card" style="width: 100%;">
+                        <div class="progress-info">
+                            <span class="stat-title">Daily Goal</span>
+                            <span class="progress-percent" id="sidebarProgressText"></span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="sidebarProgressFill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="settings.html" class="settings-btn">
+                    <span class="item-icon">⚙️</span> 
+                    <span class="item-text">Settings</span>
+                </a>
+            </div>
+        </aside>
+
+        <div class="main-wrapper">
+            <nav class="navbar">
+                <div class="nav-left">
+                    <span class="brand-name">SignSight</span>
+                </div>
+                
+                <div class="nav-spacer"></div> 
+                
+                <div class="profile-section">
+                    <div class="profile-circle" id="profile-btn">
+                        <span id="sidebarAvatar">U</span>
+                    </div>
+                    <div class="profile-dropdown" id="dropdown-menu">
+                        <a href="edit-profile.html" class="dropdown-link">Edit Profile</a>
+                        <a href="#" class="logout-link" id="logout-btn">Log Out</a>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="content-area">
+                <div class="dashboard-container">
+                    <h1 class="welcome-text">Welcome Back, <span id="displayName">User</span>!</h1>
+                    <p class="subtitle">Select a mode to begin your session.</p>
+
+                    <div class="modes-stack">
+                        <div class="floating-card deaf-mode" onclick="window.location.href='deaf-mode.html'">
+                            <div class="card-icon">🤟</div>
+                            <div class="card-info">
+                                <h3>Deaf Mode</h3>
+                                <p>Enable real-time sign language recognition.</p>
+                            </div>
+                        </div>
+
+                        <div class="floating-card blind-mode" onclick="window.location.href='blind-mode.html'">
+                            <div class="card-icon">🦯</div>
+                            <div class="card-info">
+                                <h3>Blind Mode</h3>
+                                <p>Enable object detection and audio feedback.</p>
+                            </div>
+                        </div>
+                        <button class="sos-btn" onclick="triggerInnovativeSOS()">SOS</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="js/sos.js"></script>
+    <script>
+        // Sidebar Toggle
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        });
+        
+        // Profile Dropdown Toggle
+        document.getElementById('profile-btn').addEventListener('click', function(e) {
+            document.getElementById('dropdown-menu').classList.toggle('active');
+            e.stopPropagation(); // Click baher pass hovu naye
+        });
+
+        // Click outside to close dropdown
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.profile-section')) {
+                const dropdown = document.getElementById('dropdown-menu');
+                if (dropdown) dropdown.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

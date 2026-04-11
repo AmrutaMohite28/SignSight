@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignSight - Dashboard Settings</title>
+    <link rel="stylesheet" href="css/style.css"> </head>
+<body>
+
+<div class="settings-container">
+    <div class="settings-header-top">
+        <a href="dashboard.html" class="back-btn">← Back</a>
+        <h2 class="settings-title">⚙️ Settings</h2>
+    </div>
+
+    <div class="settings-section">
+        <div class="section-header">MODE ADJUSTMENTS</div>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <div class="setting-text">
+                    <label>Speech Rate (Blind Mode)</label>
+                    <p>Choose how fast the AI speaks</p>
+                </div>
+                <input type="range" id="speechRate" min="0.5" max="2" step="0.1" value="1">
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-text">
+                    <label>Detection Speed (Deaf Mode)</label>
+                    <p>Adjust the speed of sign recognition</p>
+                </div>
+                <select id="detectionSpeed">
+                    <option value="normal">Normal</option>
+                    <option value="high">High (Fast)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <div class="section-header">PREFERENCES</div>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <div class="setting-text">
+                    <label>Notifications</label>
+                    <p>Enable sound feedback for buttons/messages</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="audioFeedback" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-text">
+                    <label>Text Size</label>
+                    <p>Change the display scale of the app text</p>
+                </div>
+                <select id="textSize">
+                    <option value="small">Small</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="large">Large</option>
+                </select>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-text">
+                    <label>App Language</label>
+                    <p>Select your communication language</p>
+                </div>
+                <select id="appLanguage">
+                    <option value="en">English</option>
+                    <option value="mr">Marathi</option>
+                    <option value="hi">Hindi</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <div class="section-header">👤 ACCOUNT STATUS</div>
+        <div class="account-status-box">
+            <p>Username: <strong id="displayUsername">loading...</strong></p>
+            <p>Status: <strong>Active</strong></p>
+        </div>
+    </div>
+
+    <div class="settings-footer">
+        <button class="btn-primary" id="saveBtn">Save Changes</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        // 1. ================= LOAD SAVED SETTINGS =================
+        // Page open jhalyavar LocalStorage madhun data ghene ani set karne
+        
+        const speechRate = document.getElementById("speechRate");
+        const detectionSpeed = document.getElementById("detectionSpeed");
+        const audioFeedback = document.getElementById("audioFeedback");
+        const textSize = document.getElementById("textSize");
+        const appLanguage = document.getElementById("appLanguage");
+
+        // Speech Rate load kara
+        if (speechRate && localStorage.getItem("speechRate")) {
+            speechRate.value = localStorage.getItem("speechRate");
+        }
+        
+        // Detection Speed load kara
+        if (detectionSpeed && localStorage.getItem("detectionSpeed")) {
+            detectionSpeed.value = localStorage.getItem("detectionSpeed");
+        }
+        
+        // Audio Feedback load kara (Checkbox)
+        if (audioFeedback && localStorage.getItem("audioFeedback") !== null) {
+            audioFeedback.checked = (localStorage.getItem("audioFeedback") === "true");
+        }
+        
+        // App Language load kara
+        if (appLanguage && localStorage.getItem("appLanguage")) {
+            appLanguage.value = localStorage.getItem("appLanguage");
+        }
+
+        // Text Size load kara ani apply kara
+        if (textSize) {
+            const savedSize = localStorage.getItem("textSize") || "medium";
+            textSize.value = savedSize;
+            applyTextSize(savedSize); // Actual text size apply hoil
+            
+            // Dropdown change kelyavar lagech preview disnyasathi
+            textSize.addEventListener("change", function() {
+                applyTextSize(this.value);
+            });
+        }
+
+        // 2. ================= TEXT SIZE HELPER FUNCTION =================
+        function applyTextSize(size) {
+            document.body.classList.remove("text-small", "text-medium", "text-large");
+            document.body.classList.add("text-" + size);
+        }
+
+        // 3. ================= SAVE BUTTON CLICK LOGIC =================
+        const saveButton = document.getElementById("saveBtn");
+        
+        if (saveButton) {
+            saveButton.addEventListener("click", function() {
+                
+                // Sagle values LocalStorage madhye save kara
+                if (speechRate) localStorage.setItem("speechRate", speechRate.value);
+                if (detectionSpeed) localStorage.setItem("detectionSpeed", detectionSpeed.value);
+                if (audioFeedback) localStorage.setItem("audioFeedback", audioFeedback.checked);
+                if (appLanguage) localStorage.setItem("appLanguage", appLanguage.value);
+                if (textSize) {
+                    localStorage.setItem("textSize", textSize.value);
+                    applyTextSize(textSize.value); // Save kelyavar text size set kara
+                }
+                
+                // Button Green karne aani text badalne
+                saveButton.innerText = "Saved Successfully! ✅";
+                saveButton.style.backgroundColor = "#10b981"; 
+                saveButton.style.color = "white"; 
+                saveButton.style.transition = "0.3s";
+
+                // Don second nantar button parat normal karne
+                setTimeout(function() {
+                    saveButton.innerText = "Save Changes";
+                    saveButton.style.backgroundColor = ""; // CSS madhla default color gheil
+                }, 2000);
+            });
+        }
+    });
+</script>
+
+<script src="settings.js"></script> 
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignSight - Edit Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>Edit <span>Profile</span></h1>
+            <p>Update your personal information</p>
+        </div>
+
+        <div id="message" style="margin-bottom: 15px; text-align: center;"></div>
+
+        <form id="editProfileForm">
+            <div class="form-group">
+                <label for="newFullName">Full Name</label>
+                <input type="text" id="newFullName" placeholder="Loading..." required>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address (Cannot be changed)</label>
+                <input type="email" id="userEmail" disabled style="background: #252545; color: #888;">
+            </div>
+
+            <button type="submit" class="btn-primary" id="updateBtn">
+                Save Changes
+            </button>
+        </form>
+
+        <div class="auth-toggle">
+            <a href="dashboard.html">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDDDGEDZPcHUjpmCjJwIuVV4ZhwFwaIZJQ",
+            authDomain: "signsight-25082.firebaseapp.com",
+            projectId: "signsight-25082",
+            storageBucket: "signsight-25082.firebasestorage.app",
+            messagingSenderId: "1016278940224",
+            appId: "1:1016278940224:web:9a8eaef508be5e2ae87da5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // 1. Current Data Load Kara
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('newFullName').value = user.displayName || "";
+                document.getElementById('userEmail').value = user.email;
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // 2. Data Update Kara [cite: 2026-02-14]
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newName = document.getElementById('newFullName').value.trim();
+            const user = auth.currentUser;
+            const msgEl = document.getElementById('message');
+
+            if (!newName) return;
+
+            try {
+                // Firebase Auth Profile Update
+                await user.updateProfile({ displayName: newName });
+
+                // Firestore Database Update
+                await db.collection('users').doc(user.uid).update({
+                    displayName: newName
+                });
+
+                msgEl.innerHTML = "<span style='color: #2ecc71;'>✅ Profile Updated Successfully!</span>";
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+
+            } catch (error) {
+                msgEl.innerHTML = "<span style='color: #ff4757;'>❌ Error: " + error.message + "</span>";
+            }
+        });
+    </script>
+</body>
+</html>

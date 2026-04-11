@@ -1,0 +1,510 @@
+/* =========================================================
+   SIGNSIGHT — DEAF MODE CSS (FIXED)
+   Bugs fixed:
+   1. Removed #conversationMode { display:none } — ID specificity
+      was overriding .mode-section.active { display:block }
+   2. Removed conflicting duplicate display rules for convVideo/processedConvFeed
+   3. Cleaned up duplicate .camera-container, .camera-section rules
+   ========================================================= */
+
+/* ── Base ── */
+body {
+    background-color: #f3f4f6;
+    margin: 0; padding: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ── Navbar ── */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #16123f;
+    padding: 0 40px;
+    height: 75px;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 2000;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.logo { margin-right: 10px; }
+
+.navbar-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    background: rgba(255,255,255,0.08);
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(168,85,247,0.3);
+    transition: all 0.3s ease;
+}
+.navbar-back-btn .arrow { color: #a855f7; font-size: 18px; font-weight: bold; }
+.navbar-back-btn .text  { color: #fff; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.navbar-back-btn:hover  { background: rgba(168,85,247,0.15); transform: translateX(-3px); border-color: #a855f7; }
+
+/* ── Mode Toggle ── */
+.mode-toggle-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.mode-toggle {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    padding: 6px;
+    border-radius: 50px;
+    display: inline-flex;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.mode-btn {
+    padding: 10px 24px;
+    border-radius: 40px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    outline: none;
+}
+.mode-btn.active {
+    background: #a855f7;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(168,85,247,0.4);
+    transform: scale(1.05);
+}
+.mode-btn:hover:not(.active) {
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+}
+
+/* ── Profile ── */
+.profile-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0 10px;
+    position: relative;
+}
+.profile-circle {
+    width: 45px; height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a855f7, #7c3aed);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 4px 12px rgba(168,85,247,0.3);
+    transition: all 0.3s;
+}
+.profile-circle:hover { transform: scale(1.08); box-shadow: 0 6px 18px rgba(168,85,247,0.5); }
+
+.profile-dropdown {
+    position: absolute;
+    top: 55px; right: 5px;
+    width: 170px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+    z-index: 5000;
+}
+.profile-dropdown.show {
+    display: flex;
+    animation: fadeInSlide 0.3s ease;
+}
+.profile-dropdown a {
+    padding: 12px 18px;
+    text-decoration: none;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.profile-dropdown a:hover { background: #f8fafc; }
+@keyframes fadeInSlide {
+    from { opacity:0; transform:translateY(-10px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── Main Container ── */
+.deaf-main-container {
+    width: 100%;
+    max-width: 1450px;
+    margin: 0 auto;
+    padding: 110px 30px 40px 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ── MODE SECTIONS ──────────────────────────────────────
+   ✅ BUG FIX 1: Removed #conversationMode { display:none }
+   That ID rule had higher CSS specificity than .mode-section.active
+   and was preventing conversation mode from ever showing.
+   Now ONLY these two rules control visibility:
+────────────────────────────────────────────────────── */
+.mode-section {
+    display: none;
+    width: 100%;
+}
+.mode-section.active {
+    display: block;
+}
+
+/* ── Learning Grid ── */
+.learning-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px;
+    min-height: 60vh;
+    margin: 40px auto;
+    padding: 0 50px;
+}
+
+/* ── Reference Card ── */
+.guide-card-section {
+    flex: 0 0 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(145deg, #0d0452, #0f172a);
+    border-radius: 35px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    border: 1px solid rgba(139,92,246,0.3);
+}
+.guide-card-section h3 {
+    font-size: 14px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 2px;
+    color: #a855f7; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+}
+.guide-card-section p { margin-top: 25px; font-size: 18px; font-weight: 700; color: #f8fafc; }
+
+.sign-image-container {
+    width: 100%; height: 300px;
+    background: #fff;
+    border-radius: 20px;
+    border: 4px solid #8b5cf6;
+    padding: 25px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+}
+.sign-image { max-width: 90%; max-height: 90%; object-fit: contain; }
+
+/* ── Camera Section ── */
+.camera-section {
+    flex: 0 0 600px;
+    background: linear-gradient(145deg, #1e1b4b, #0f172a);
+    border-radius: 25px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.camera-container {
+    width: 100%;
+    height: 400px;
+    background: #000;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ✅ BUG FIX 2: Show raw video as fallback so screen is never black
+   Video shows live feed → processedFeed overlays on top when backend responds */
+#cameraFeed {
+    position: absolute;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    top: 0; left: 0;
+    z-index: 1;   /* Behind processed frame */
+    display: block; /* Always visible as fallback */
+}
+#processedFeed {
+    position: absolute;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    top: 0; left: 0;
+    z-index: 2;   /* On top — shows red dots + white lines */
+    display: none; /* Hidden until backend sends frame */
+}
+
+/* ── Camera Overlay (Confidence Ring) ── */
+.camera-overlay {
+    position: absolute;
+    top: 15px; right: 15px;
+    z-index: 10;
+}
+.confidence-circle {
+    width: 80px; height: 80px;
+    position: relative;
+    background: rgba(0,0,0,0.4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+}
+.confidence-ring {
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+}
+.bg-ring      { fill: none; stroke: rgba(255,255,255,0.15); stroke-width: 8; }
+.progress-ring { fill: none; stroke: #a855f7; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.3s ease; }
+#confidencePercent { position: absolute; font-size: 14px; font-weight: 800; color: #fff; }
+
+/* ── Camera Controls ── */
+.camera-controls {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+.btn-camera, .btn-speak {
+    padding: 12px 25px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    background: #a855f7;
+    color: #fff;
+    transition: 0.3s;
+}
+.btn-camera:hover, .btn-speak:hover { opacity: 0.85; transform: scale(1.03); }
+
+/* ── Alphabet Section ── */
+.alphabet-section {
+    width: 100%;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 15px;
+    background: #16123f;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.alphabet-scroller {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 10px 5px;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    scrollbar-color: #a855f7 transparent;
+}
+.alphabet-scroller::-webkit-scrollbar { height: 6px; }
+.alphabet-scroller::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+.alphabet-scroller::-webkit-scrollbar-thumb { background: #a855f7; border-radius: 10px; }
+
+.alphabet-btn {
+    flex: 0 0 50px;
+    height: 50px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex; align-items: center; justify-content: center;
+}
+.alphabet-btn.active {
+    background: #a855f7;
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(168,85,247,0.5);
+}
+
+/* ── Stats Dashboard ── */
+.stats-dashboard {
+    position: fixed;
+    left: 20px;
+    top: 55%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 155px;
+    z-index: 1000;
+}
+.stat-box {
+    width: 155px; height: 125px;
+    background: #fff;
+    border-radius: 25px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+}
+.stat-box:hover { transform: scale(1.05); box-shadow: 0 12px 30px rgba(168,85,247,0.2); }
+.stat-icon   { font-size: 28px; margin-bottom: 8px; }
+.stat-label  { color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.3; margin-bottom: 4px; }
+.stat-value  { color: #1e1b4b; font-size: 20px; font-weight: 800; }
+
+/* ── SOS Button ── */
+.sos-btn {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    width: 75px; height: 75px;
+    background: linear-gradient(135deg, #ff4b2b, #ff416c);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(255,65,108,0.4);
+    z-index: 5000;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+    animation: sosPulse 2s infinite;
+}
+.sos-btn:hover { transform: scale(1.1); box-shadow: 0 15px 30px rgba(255,65,108,0.6); }
+@keyframes sosPulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,65,108,0.7); }
+    70%      { box-shadow: 0 0 0 20px rgba(255,65,108,0); }
+}
+
+/* ════════════════════════════════════════════
+   CONVERSATION MODE
+   ✅ BUG FIX 1: Removed #conversationMode { display:none }
+   Visibility is now handled ONLY by .mode-section / .mode-section.active
+════════════════════════════════════════════ */
+.conv-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.conv-middle-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+/* History Sidebar */
+.conv-history-sidebar {
+    flex: 0 0 220px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 15px;
+    height: 400px;
+    overflow-y: auto;
+}
+.history-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+    color: #fff;
+}
+.history-item {
+    font-size: 14px;
+    padding: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    color: #e2e8f0;
+}
+
+/* Conversation Camera Box */
+.conv-camera-box {
+    flex: 1;
+    position: relative;
+    background: #000;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 400px;
+    border: 2px solid #8b5cf6;
+}
+
+/* ✅ BUG FIX 2: Show raw video + overlay processed frame
+   Screen is NEVER black — raw video always visible as fallback */
+#convVideo {
+    position: absolute;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    top: 0; left: 0;
+    z-index: 1;
+    display: block; /* Always visible as fallback */
+}
+#processedConvFeed {
+    position: absolute;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    top: 0; left: 0;
+    z-index: 2; /* On top — shows red dots + white lines from backend */
+    display: none; /* Hidden until backend sends frame */
+}
+
+.conv-placeholder {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: #555;
+    text-align: center;
+    z-index: 3;
+    font-size: 16px;
+}
+
+/* Conversation Buttons */
+.conv-btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.btn-conv {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #6366f1;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.btn-conv:hover    { opacity: 0.85; }
+.btn-start         { background: #10b981; }
+
+/* Detected Text Box */
+.conv-sentence-box {
+    background: rgba(255,255,255,0.08);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.label { font-weight: bold; display: block; margin-bottom: 5px; color: #a855f7; }
+#detectedText { font-size: 18px; color: #f1f5f9; min-height: 30px; }
