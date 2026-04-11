@@ -2,5 +2,6 @@ flask
 flask-socketio
 flask-cors
 opencv-python-headless
-mediapipe
+mediapipe==0.10.9
 numpy
+requests
