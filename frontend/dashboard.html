@@ -3,130 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignSight Dashboard</title>
-    <link rel="stylesheet" href="css/dashboard.css">
-    
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
-
+    <title>SignSight - Deaf Mode</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/deaf-mode.css">
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <aside class="sidebar collapsed" id="sidebar">
-            <div class="sidebar-header">
-                <button class="menu-btn" id="menu-btn">☰</button>
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="logo">Sign<span>Sight</span></div>
+            <a href="dashboard.html" class="navbar-back-btn">
+                <span class="arrow">←</span>
+                <span class="text">Back</span>
+            </a>
+        </div><!-- /navbar-left -->
+
+        <div class="mode-toggle-container">
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="learningBtn" onclick="switchMode('learning')">📚 Learning Mode</button>
+                <button class="mode-btn" id="conversationBtn" onclick="switchMode('conversation')">💬 Conversation Mode</button>
             </div>
-            
-            <div class="sidebar-content">
-                <div class="sidebar-item">
-                    <span class="item-icon">🔥</span>
-                    <div class="item-text">
-                        <span class="stat-title">Current Streak</span>
-                        <span class="stat-val" id="sidebarStreak"></span>
-                    </div>
-                </div>
-                
-                <div class="sidebar-item">
-                    <span class="item-icon">⏱️</span>
-                    <div class="item-text">
-                        <span class="stat-title">Time Spent Today</span>
-                        <span class="stat-val" id="timeSpent"></span>
-                    </div>
-                </div>
-
-                <div class="sidebar-item">
-                    <span class="item-icon">🎯</span>
-                    <div class="item-text progress-card" style="width: 100%;">
-                        <div class="progress-info">
-                            <span class="stat-title">Daily Goal</span>
-                            <span class="progress-percent" id="sidebarProgressText"></span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" id="sidebarProgressFill" style="width: 0%;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-footer">
-                <a href="settings.html" class="settings-btn">
-                    <span class="item-icon">⚙️</span> 
-                    <span class="item-text">Settings</span>
-                </a>
-            </div>
-        </aside>
-
-        <div class="main-wrapper">
-            <nav class="navbar">
-                <div class="nav-left">
-                    <span class="brand-name">SignSight</span>
-                </div>
-                
-                <div class="nav-spacer"></div> 
-                
-                <div class="profile-section">
-                    <div class="profile-circle" id="profile-btn">
-                        <span id="sidebarAvatar">U</span>
-                    </div>
-                    <div class="profile-dropdown" id="dropdown-menu">
-                        <a href="edit-profile.html" class="dropdown-link">Edit Profile</a>
-                        <a href="#" class="logout-link" id="logout-btn">Log Out</a>
-                    </div>
-                </div>
-            </nav>
-
-            <main class="content-area">
-                <div class="dashboard-container">
-                    <h1 class="welcome-text">Welcome Back, <span id="displayName">User</span>!</h1>
-                    <p class="subtitle">Select a mode to begin your session.</p>
-
-                    <div class="modes-stack">
-                        <div class="floating-card deaf-mode" onclick="window.location.href='deaf-mode.html'">
-                            <div class="card-icon">🤟</div>
-                            <div class="card-info">
-                                <h3>Deaf Mode</h3>
-                                <p>Enable real-time sign language recognition.</p>
-                            </div>
-                        </div>
-
-                        <div class="floating-card blind-mode" onclick="window.location.href='blind-mode.html'">
-                            <div class="card-icon">🦯</div>
-                            <div class="card-info">
-                                <h3>Blind Mode</h3>
-                                <p>Enable object detection and audio feedback.</p>
-                            </div>
-                        </div>
-                        <button class="sos-btn" onclick="triggerInnovativeSOS()">SOS</button>
-                    </div>
-                </div>
-            </main>
         </div>
-    </div>
-    <script src="auth.js"></script>
-    <script src="dashboard.js"></script>
-    <script src="js/sos.js"></script>
-    <script>
-        // Sidebar Toggle
-        document.getElementById('menu-btn').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
-        });
-        
-        // Profile Dropdown Toggle
-        document.getElementById('profile-btn').addEventListener('click', function(e) {
-            document.getElementById('dropdown-menu').classList.toggle('active');
-            e.stopPropagation(); // Click baher pass hovu naye
-        });
 
-        // Click outside to close dropdown
-        window.addEventListener('click', function(e) {
-            if (!e.target.closest('.profile-section')) {
-                const dropdown = document.getElementById('dropdown-menu');
-                if (dropdown) dropdown.classList.remove('active');
-            }
-        });
-    </script>
+        <div class="profile-section">
+            <div class="profile-circle" onclick="toggleProfileMenu()">
+                <span>A</span>
+            </div>
+            <div class="profile-dropdown" id="profileDropdown">
+                <a href="edit-profile.html">Edit Profile</a>
+                <a href="#" class="logout-text">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── MAIN CONTAINER ── -->
+    <div class="deaf-main-container">
+
+        <!-- ════════════════════════════════════
+             LEARNING MODE  (default: active)
+        ════════════════════════════════════ -->
+        <div id="learningMode" class="mode-section active">
+
+            <div class="learning-grid">
+
+                <!-- Reference Card -->
+                <div class="guide-card-section">
+                    <div class="guide-card">
+                        <h3>📌 Reference Sign</h3>
+                        <div class="sign-image-container">
+                            <img id="referenceImage"
+                                src="images/signs/a.jpeg"
+                                alt="Sign Reference"
+                                class="sign-image"
+                                onerror="this.onerror=null; this.src='https://placehold.co/300?text=Sign+Not+Found'">
+                            <p id="signLabel">A</p>
+                        </div>
+                        <p class="guide-text">Match this sign to practice</p>
+                    </div>
+                </div>
+
+                <!-- Camera Section -->
+                <div class="camera-section">
+                    <div class="camera-container">
+                        <!-- ✅ Video shown as live fallback (not hidden) -->
+                        <video id="cameraFeed" autoplay playsinline></video>
+                        <!-- Processed frame from backend overlays on top -->
+                        <img id="processedFeed" src="" alt="Processed feed">
+                        <div class="camera-overlay">
+                            <div class="confidence-circle">
+                                <svg viewBox="0 0 100 100" class="confidence-ring">
+                                    <circle cx="50" cy="50" r="45" class="bg-ring"></circle>
+                                    <circle cx="50" cy="50" r="45" class="progress-ring" id="confidenceRing"></circle>
+                                </svg>
+                                <span id="confidencePercent">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="camera-controls">
+                        <button id="cameraToggle" class="btn-camera" onclick="toggleCamera()">
+                            🛑 Stop Camera
+                        </button>
+                        <button class="btn-speak" onclick="speakText()">🔊 Speak</button>
+                    </div>
+                </div>
+
+            </div><!-- /learning-grid -->
+
+            <!-- Alphabet Scroller -->
+            <div class="alphabet-section">
+                <div class="sign-display-card">
+                    <div class="alphabet-scroller" id="alphabetScroller">
+                        <script>
+                            "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(function(l) {
+                                document.write('<button class="alphabet-btn ' + (l==='A'?'active':'') + '" data-letter="' + l + '" onclick="changeSign(this)">' + l + '</button>');
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div><!-- /alphabet-section ✅ FIXED: was missing </div> -->
+
+            <button class="sos-btn" onclick="triggerInnovativeSOS()">SOS</button>
+
+            <!-- Stats -->
+            <div class="stats-dashboard">
+                <div class="stat-box">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-label">Total Practice Time</div>
+                    <div class="stat-value" id="totalTime">0h 0m</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-label">Overall Progress</div>
+                    <div class="stat-value" id="overallProgress">0%</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-label">Streak Days</div>
+                    <div class="stat-value" id="streakDays">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-label">Sessions Completed</div>
+                    <div class="stat-value" id="sessionsCount">0</div>
+                </div>
+            </div><!-- /stats-dashboard -->
+            <script src="help.html"></script>
+        </div><!-- /learningMode ✅ FIXED -->
+
+        <!-- ════════════════════════════════════
+             CONVERSATION MODE (default: hidden)
+             ✅ FIXED: Now correctly OUTSIDE learningMode
+        ════════════════════════════════════ -->
+        <div id="conversationMode" class="mode-section">
+            <div class="conv-container">
+
+                <div class="conv-middle-row">
+
+                    <!-- History Sidebar -->
+                    <div class="conv-history-sidebar">
+                        <div class="history-title">📜 Translation History</div>
+                        <div id="historyList">
+                            <p style="color:#888;font-size:0.9em;">No history yet...</p>
+                        </div>
+                    </div>
+
+                    <!-- Conversation Camera Box -->
+                    <div class="conv-camera-box">
+                        <!-- ✅ Video shown as live fallback -->
+                        <video id="convVideo" autoplay playsinline></video>
+                        <!-- Processed frame from backend overlays on top -->
+                        <img id="processedConvFeed" src="" alt="Processed feed">
+                        <div id="convPlaceholder" class="conv-placeholder">
+                            <p>📹 Camera is OFF</p>
+                        </div>
+                    </div>
+
+                </div><!-- /conv-middle-row -->
+
+                <!-- Buttons -->
+                <div class="conv-btn-row">
+                    <button id="convToggleBtn" class="btn-conv btn-start" onclick="toggleConversationCamera()">
+                        📹 Start Camera
+                    </button>
+                    <button class="btn-conv btn-copy" onclick="copySentence()">📄 Copy Text</button>
+                    <button class="btn-conv btn-clear" onclick="clearSentence()">🧹 Clear</button>
+                </div>
+
+                <!-- Detected Text -->
+                <div class="conv-sentence-box">
+                    <span class="label">Detected Translation:</span>
+                    <div id="detectedText">Waiting for signs...</div>
+                </div>
+
+                <!-- ✅ FIXED: was </button without > -->
+                <button class="sos-btn" onclick="triggerSOS()">SOS</button>
+
+            </div><!-- /conv-container ✅ FIXED -->
+        </div><!-- /conversationMode ✅ FIXED -->
+
+    </div><!-- /deaf-main-container ✅ FIXED -->
+
+    <!-- ✅ Scripts at correct position — OUTSIDE all divs, before </body> -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/deaf-mode.js"></script>
+    <script src="js/sos.js"></script>
+    <script src="js/translations.js"></script>
+
 </body>
 </html>
