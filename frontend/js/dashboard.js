@@ -22,181 +22,177 @@ if (typeof firebase !== 'undefined') {
     console.log("✅ Firebase initialized for Dashboard!");
 }
 
-// ============================================
-// 2. AUTHENTICATION CHECK
-// ============================================
-window.addEventListener('load', function() {
-    if (auth) {
-        auth.onAuthStateChanged(function(user) {
-            if (user) {
-                console.log("User detected:", user.email);
-                loadDashboardData(user);
-            } else {
-                // User login nasel tar login page var pathva
-                window.location.replace('login.html');
-            }
-        });
-    }
-});
+'use strict';
 
-// ============================================
-// 3. FIRESTORE मधून डेटा लोड करणे
-// ============================================
-async function loadDashboardData(user) {
+(function () {
+  const sidebar = document.getElementById('sidebar');
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const profileBtn = document.getElementById('profile-btn');
+  const dropdownMenu = document.getElementById('dropdown-menu');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  const displayNameEl = document.getElementById('displayName');
+  const sidebarAvatarEl = document.getElementById('sidebarAvatar');
+  const sidebarStreakEl = document.getElementById('sidebarStreak');
+  const timeSpentEl = document.getElementById('timeSpent');
+  const sidebarProgressTextEl = document.getElementById('sidebarProgressText');
+  const sidebarProgressFillEl = document.getElementById('sidebarProgressFill');
+
+  const deafModeCard = document.getElementById('deaf-mode-card');
+  const blindModeCard = document.getElementById('blind-mode-card');
+
+  const isMobile = () => window.matchMedia('(max-width: 980px)').matches;
+
+  function closeMobileSidebar() {
+    if (isMobile() && sidebar) {
+      sidebar.classList.remove('open');
+      sidebar.classList.add('collapsed');
+    }
+  }
+
+  function toggleSidebar() {
+    if (!sidebar) return;
+
+    if (isMobile()) {
+      sidebar.classList.toggle('open');
+      return;
+    }
+
+    sidebar.classList.toggle('collapsed');
+  }
+
+  function toggleDropdown(event) {
+    event.stopPropagation();
+    dropdownMenu?.classList.toggle('active');
+  }
+
+  function closeDropdownIfOutside(event) {
+    if (!event.target.closest('#profile-section')) {
+      dropdownMenu?.classList.remove('active');
+    }
+
+    if (isMobile() && sidebar?.classList.contains('open')) {
+      const insideSidebar = event.target.closest('#sidebar');
+      const clickedMenuBtn = event.target.closest('#mobile-menu-btn');
+      if (!insideSidebar && !clickedMenuBtn) {
+        closeMobileSidebar();
+      }
+    }
+  }
+
+  function normalizePercent(value) {
+    const number = Math.max(0, Math.min(100, Number(value) || 0));
+    return number;
+  }
+
+  function updateProgress(value) {
+    const percent = normalizePercent(value);
+    if (sidebarProgressTextEl) sidebarProgressTextEl.textContent = `${percent}%`;
+    if (sidebarProgressFillEl) sidebarProgressFillEl.style.width = `${percent}%`;
+  }
+
+  function updateStreak() {
+    const storageKeyStreak = 'signsight_streak';
+    const storageKeyLastVisit = 'signsight_last_visit';
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const oneDayMs = 24 * 60 * 60 * 1000;
+
+    let streak = Number(localStorage.getItem(storageKeyStreak)) || 0;
+    const lastVisit = Number(localStorage.getItem(storageKeyLastVisit)) || 0;
+
+    if (lastVisit === today) {
+      // unchanged
+    } else if (lastVisit === today - oneDayMs) {
+      streak += 1;
+      localStorage.setItem(storageKeyStreak, String(streak));
+      localStorage.setItem(storageKeyLastVisit, String(today));
+    } else {
+      streak = 1;
+      localStorage.setItem(storageKeyStreak, '1');
+      localStorage.setItem(storageKeyLastVisit, String(today));
+    }
+
+    if (sidebarStreakEl) sidebarStreakEl.textContent = `${streak} ${streak === 1 ? 'Day' : 'Days'}`;
+  }
+
+  function updateTimeSpent(userData) {
+    const timeText = userData.timeSpentToday || userData.totalTime || '0m';
+    if (timeSpentEl) timeSpentEl.textContent = timeText;
+  }
+
+  function hydrateUser(user, userData) {
+    const fullName = userData.displayName || userData.fullName || user.displayName || user.email?.split('@')[0] || 'User';
+    const safeName = fullName.trim() || 'User';
+    const initial = safeName.charAt(0).toUpperCase();
+
+    if (displayNameEl) displayNameEl.textContent = safeName;
+    if (sidebarAvatarEl) sidebarAvatarEl.textContent = initial;
+
+    const progress = userData.dailyGoalProgress ?? userData.overallProgress ?? userData.progress ?? 0;
+    updateProgress(progress);
+    updateTimeSpent(userData);
+  }
+
+  async function loadDashboardData(user) {
+    if (typeof db === 'undefined') return;
+
     try {
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        const userData = userDoc.data() || {};
-
-        // नाव आणि Initial सेट करणे (Profile sathi)
-        const fullName = userData.displayName || userData.fullName || user.email.split('@')[0];
-        const initial = fullName.charAt(0).toUpperCase();
-
-        // UI Updates
-        updateElement('profile-btn', initial); // Top right profile circle
-        updateElement('sidebarAvatar', initial); 
-        
-        // Jar tula Firebase madhun progress dakhavaychi asel tar he chalel
-        const progress = (userData.overallProgress || userData.progress || "0") + '%';
-        const progressFill = document.querySelector('.progress-bar-fill');
-        const progressText = document.querySelector('.progress-percent');
-        
-        if (progressFill) progressFill.style.width = progress;
-        if (progressText) progressText.textContent = progress;
-
+      const userDoc = await db.collection('users').doc(user.uid).get();
+      const userData = userDoc.exists ? userDoc.data() : {};
+      hydrateUser(user, userData || {});
     } catch (error) {
-        console.error('Error loading dashboard:', error);
+      console.error('Dashboard load error:', error);
+      hydrateUser(user, {});
     }
-}
+  }
 
-// Utility function
-function updateElement(id, value) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value;
-}
-
-// ============================================
-// 4. LOGOUT LOGIC
-// ============================================
-document.addEventListener("DOMContentLoaded", function() {
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', async function(e) {
-            e.preventDefault();
-            if (confirm('Are you sure you want to logout?')) {
-                try {
-                    await auth.signOut();
-                    window.location.replace('index.html');
-                } catch (error) {
-                    console.error('Logout error:', error);
-                }
-            }
-        });
-    }
-});
-
-// ============================================
-// 5. UI LOGIC (Sidebar, Streak, Dropdown)
-// ============================================
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // --- Dynamic Streak Logic ---
-    function updateStreak() {
-        const streakEl = document.getElementById('streak-value');
-        if (!streakEl) return;
-
-        let currentStreak = parseInt(localStorage.getItem('signsight_streak')) || 0;
-        let lastVisit = localStorage.getItem('signsight_last_visit');
-        const today = new Date().toDateString(); 
-        const yesterday = new Date(Date.now() - 86400000).toDateString();
-
-        if (lastVisit === today) {
-            streakEl.textContent = currentStreak + " Days 🔥";
-        } else if (lastVisit === yesterday) {
-            currentStreak++;
-            localStorage.setItem('signsight_streak', currentStreak);
-            localStorage.setItem('signsight_last_visit', today);
-            streakEl.textContent = currentStreak + " Days 🔥";
-        } else {
-            currentStreak = 1;
-            localStorage.setItem('signsight_streak', currentStreak);
-            localStorage.setItem('signsight_last_visit', today);
-            streakEl.textContent = currentStreak + " Day 🔥";
-        }
-    }
-    updateStreak();
-
-    // --- Sidebar Logic ---
-    const openMenuBtn = document.getElementById('open-menu-btn');
-    const closeMenuBtn = document.getElementById('close-menu-btn');
-    const sidebar = document.getElementById('sidebar');
-
-    if (openMenuBtn && sidebar) {
-        openMenuBtn.addEventListener('click', function() {
-            sidebar.classList.add('active'); // Sidebar baher yeil
-        });
+  async function logout(event) {
+    event.preventDefault();
+    if (typeof auth === 'undefined') {
+      window.location.replace('index.html');
+      return;
     }
 
-    if (closeMenuBtn && sidebar) {
-        closeMenuBtn.addEventListener('click', function() {
-            sidebar.classList.remove('active'); // Sidebar aat jail
-        });
+    try {
+      await auth.signOut();
+      window.location.replace('index.html');
+    } catch (error) {
+      console.error('Logout error:', error);
     }
+  }
 
-    // --- Profile Dropdown Logic ---
-    const profileBtn = document.getElementById('profile-btn');
-    const dropdownMenu = document.getElementById('dropdown-menu');
+  function routeTo(path) {
+    closeMobileSidebar();
+    window.location.href = path;
+  }
 
-    if (profileBtn && dropdownMenu) {
-        profileBtn.addEventListener('click', function(event) {
-            dropdownMenu.classList.toggle('active');
-            event.stopPropagation(); 
-        });
+  menuBtn?.addEventListener('click', toggleSidebar);
+  mobileMenuBtn?.addEventListener('click', toggleSidebar);
+  profileBtn?.addEventListener('click', toggleDropdown);
+  window.addEventListener('click', closeDropdownIfOutside);
+  logoutBtn?.addEventListener('click', logout);
+
+  deafModeCard?.addEventListener('click', () => routeTo('deaf-mode.html'));
+  blindModeCard?.addEventListener('click', () => routeTo('blind-mode.html'));
+
+  window.addEventListener('resize', () => {
+    if (!isMobile() && sidebar) {
+      sidebar.classList.remove('open');
     }
+  });
 
-    // Baher click kelyavar dropdown band honyasathi
-    window.onclick = function(event) {
-        if (!event.target.closest('.profile-section')) {
-            if (dropdownMenu && dropdownMenu.classList.contains('active')) {
-                dropdownMenu.classList.remove('active');
-            }
-        }
-    }
-});
+  updateStreak();
 
-// He tujhya existing dash.js madhe UI Logic chya aat thev
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // Sidebar Toggle Logic
-    const menuBtn = document.getElementById('menu-btn');
-    const sidebar = document.getElementById('sidebar');
-
-    if (menuBtn && sidebar) {
-        menuBtn.addEventListener('click', function() {
-            // He click kelyavar collapsed class lagel kiva nighun jail
-            sidebar.classList.toggle('collapsed'); 
-        });
-    }
-
-    // Dropdown Logic
-    const profileBtn = document.getElementById('profile-btn');
-    const dropdownMenu = document.getElementById('dropdown-menu');
-
-    if (profileBtn && dropdownMenu) {
-        profileBtn.addEventListener('click', function(event) {
-            dropdownMenu.classList.toggle('active');
-            event.stopPropagation(); 
-        });
-    }
-
-    window.onclick = function(event) {
-        if (!event.target.closest('.profile-section')) {
-            if (dropdownMenu && dropdownMenu.classList.contains('active')) {
-                dropdownMenu.classList.remove('active');
-            }
-        }
-    }
-});
-document.getElementById('profile-btn').addEventListener('click', function(e) {
-    document.getElementById('dropdown-menu').classList.toggle('active');
-    e.stopPropagation();
-});
+  if (typeof auth !== 'undefined') {
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.replace('login.html');
+        return;
+      }
+      loadDashboardData(user);
+    });
+  }
+})();
