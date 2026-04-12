@@ -50,6 +50,22 @@ function getErrMsg(code) {
     return map[code] || '❌ Error: ' + code;
 }
 
+function isMobileDevice() {
+    return /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent || '');
+}
+
+async function upsertUserProfile(user) {
+    if (!user) return;
+    await db.collection('users').doc(user.uid).set({
+        uid:         user.uid,
+        displayName: user.displayName || '',
+        email:       user.email || '',
+        photoURL:    user.photoURL || '',
+        lastLogin:   new Date(),
+        createdAt:   new Date()
+    }, { merge: true });
+}
+
 // ── Password Toggle ───────────────────────────────────────────────
 
 function togglePassword(inputId) {
@@ -71,15 +87,7 @@ window.addEventListener('DOMContentLoaded', async function () {
             var user = result.user;
             console.log("✅ Google Redirect Login Success:", user.email);
 
-            // Save to Firestore
-            await db.collection('users').doc(user.uid).set({
-                uid:         user.uid,
-                displayName: user.displayName || '',
-                email:       user.email || '',
-                photoURL:    user.photoURL || '',
-                lastLogin:   new Date(),
-                createdAt:   new Date()
-            }, { merge: true });
+            await upsertUserProfile(user);
 
             // ✅ FIX: correct syntax — was window.location.replace= /'...'
             window.location.replace('dashboard.html');
@@ -182,6 +190,12 @@ if (loginForm) {
         setLoading('loginBtn', 'loginSpinner', 'loginBtnText', true);
 
         try {
+            await auth.setPersistence(
+                remember
+                    ? firebase.auth.Auth.Persistence.LOCAL
+                    : firebase.auth.Auth.Persistence.SESSION
+            );
+
             var userCredential = await auth.signInWithEmailAndPassword(email, password);
             var user = userCredential.user;
 
@@ -219,13 +233,34 @@ async function loginWithGoogle() {
         var googleBtn = document.querySelector('.btn-social');
         if (googleBtn) googleBtn.disabled = true;
 
+        await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
         var provider = new firebase.auth.GoogleAuthProvider();
         provider.addScope('email');
         provider.addScope('profile');
+        provider.setCustomParameters({ prompt: 'select_account' });
 
-        // signInWithRedirect works on mobile AND desktop
-        await auth.signInWithRedirect(provider);
-        // Page redirects to Google — result handled in DOMContentLoaded above
+        if (isMobileDevice()) {
+            await auth.signInWithRedirect(provider);
+            return;
+        }
+
+        try {
+            var popupResult = await auth.signInWithPopup(provider);
+            if (popupResult && popupResult.user) {
+                await upsertUserProfile(popupResult.user);
+                window.location.replace('dashboard.html');
+            }
+            return;
+        } catch (popupErr) {
+            if (popupErr && (popupErr.code === 'auth/popup-blocked' || popupErr.code === 'auth/cancelled-popup-request')) {
+                await auth.signInWithRedirect(provider);
+                return;
+            }
+            throw popupErr;
+        }
+
+        // Redirect result handled in DOMContentLoaded when flow returns.
 
     } catch (err) {
         console.error('Google login error:', err.code);
