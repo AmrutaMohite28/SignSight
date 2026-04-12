@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignSight - Sign Up</title>
+    <title>SignSight - Login</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="auth-page">
     <div class="auth-container">
         <div class="auth-header">
             <h1>Sign<span>Sight</span></h1>
-            <p>Join and start your journey</p>
+            <p>Welcome back to your account</p>
         </div>
-
-        <div class="message error" id="signupError"></div>
-        <div class="message success" id="signupSuccess"></div>
-
-        <button class="btn-social" onclick="signupWithGoogle()" aria-label="Sign up with Google">
+        <div class="message error" id="loginError"></div>
+        <div class="message success" id="loginSuccess"></div>
+        <button class="btn-social" onclick="loginWithGoogle()" aria-label="Login with Google">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -25,76 +23,41 @@
             </svg>
             Continue with Google
         </button>
-
-        <div class="divider">or register with email</div>
-
-        <form id="signupForm">
+        <div class="divider">or continue with email</div>
+        <form id="loginForm">
             <div class="form-group">
-                <label for="fullName">Full Name</label>
-                <input 
-                    type="text" 
-                    id="fullName" 
-                    placeholder="John Doe"
-                    required
-                    aria-label="Full Name"
-                >
-            </div>
-
-            <div class="form-group">
-                <label for="signupEmail">Email Address</label>
+                <label for="loginEmail">Email Address</label>
                 <input 
                     type="email" 
-                    id="signupEmail" 
+                    id="loginEmail" 
                     placeholder="your.email@example.com"
                     required
                     aria-label="Email Address"
                 >
             </div>
-
-           <div class="form-group">
-                <label for="signupPassword">Password</label>
-                <div class="input-wrapper">
-                    <input 
-                        type="password" 
-                        id="signupPassword" 
-                        placeholder="••••••••"
-                        required
-                        minlength="6"
-                        aria-label="Password"
-                    >
-                    <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')" aria-label="Toggle password visibility">
-                        👁️
-                    </button>
-                </div>
-            </div>
-
             <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
+                <label for="loginPassword">Password</label>
                 <div class="input-wrapper">
-                    <input 
-                        type="password" 
-                        id="confirmPassword" 
+                    <input type="password" id="loginPassword"
                         placeholder="••••••••"
-                        required
-                        aria-label="Confirm Password"
-                    >
-                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')" aria-label="Toggle password visibility">
-                        👁️
-                    </button>
+                        required autocomplete="current-password">
+                    <button type="button" class="password-toggle"
+                        onclick="togglePassword('loginPassword')">👁️</button>
                 </div>
             </div>
-
-            <button type="submit" class="btn-primary" id="signupBtn" aria-label="Create account button">
-                <span class="spinner" id="signupSpinner"></span>
-                <span id="signupBtnText">Create Account</span>
+            <div class="remember-me">
+                <input type="checkbox" id="rememberMe" aria-label="Remember me">
+                <label for="rememberMe">Remember me</label>
+            </div>
+            <button type="submit" class="btn-primary" id="loginBtn" aria-label="Login button">
+                <span class="spinner" id="loginSpinner"></span>
+                <span id="loginBtnText">Login</span>
             </button>
         </form>
-
         <div class="auth-toggle">
-            Already have an account? <a href="login.html">Login</a>
+            Don't have an account? <a href="Signup.html">Sign up</a>
         </div>
     </div>
-
     <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
@@ -102,7 +65,6 @@
     
     <script src="js/firebase-config.js"></script>
     <script src="js/auth.js"></script>
-
 </body>
 </html>
 
