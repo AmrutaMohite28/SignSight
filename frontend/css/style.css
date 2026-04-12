@@ -1331,6 +1331,30 @@ body.text-large .btn-primary { font-size: 17px; }
 }
 
 @media (max-width: 768px) {
+    .hero-buttons,
+    .btn-group,
+    .cta-buttons {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .hero-buttons button,
+    .hero-buttons a,
+    .btn-group button,
+    .btn-group a,
+    .cta-buttons button,
+    .cta-buttons a {
+        width: auto !important;
+        flex: 1 !important;
+        font-size: 13px !important;
+        padding: 10px 15px !important;
+        white-space: nowrap !important;
+    }
+}
+
+@media (max-width: 768px) {
 
     /* Navbar fix */
     .nav-links {
