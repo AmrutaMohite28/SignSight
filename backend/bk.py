@@ -271,9 +271,8 @@ def health_check():
 def get_asl_letters():
     return jsonify({'letters': list(asl_recognizer.asl_patterns.keys())}), 200
 
-import threading, requests, time
-
 def keep_alive():
+    import time, requests
     while True:
         time.sleep(840)
         try:
@@ -281,6 +280,7 @@ def keep_alive():
         except:
             pass
 
+import threading
 threading.Thread(target=keep_alive, daemon=True).start()
 
 if __name__ == '__main__':
