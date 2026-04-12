@@ -60,7 +60,7 @@ auth.createUserWithEmailAndPassword(email, password)
     })
     .then(() => {
         alert("Account created successfully!");
-        window.location.replace('dashboard.html');
+        window.location.replace= /'dashboard.html';
     })
         .catch((error) => {
             alert("Signup Error: " + error.message);
@@ -88,7 +88,7 @@ if (loginForm) {
             })
             .then(() => {
                 console.log("Login Success!");
-                window.location.replace('dashboard.html');
+                window.location.replace= /'dashboard.html';
             })
             .catch((error) => {
                 alert("Login Error: " + error.message);
@@ -141,7 +141,7 @@ async function loginWithGoogle() {
         }, { merge: true });
 
         console.log("Google Login Success!");
-        window.location.replace('dashboard.html');
+        window.location.replace= /'dashboard.html';
 
     } catch (error) {
         console.error("Google Login Error:", error);
