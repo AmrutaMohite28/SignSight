@@ -1245,3 +1245,87 @@ body.text-large .section-header { font-size: 15px; }
 body.text-large select, body.text-large input { font-size: 15px; }
 body.text-large .account-status-box p { font-size: 16px; }
 body.text-large .btn-primary { font-size: 17px; }
+
+@media (max-width: 768px) {
+    /* Navbar fix */
+    .nav-links {
+        display: none;
+    }
+    
+    nav {
+        padding: 10px 20px;
+    }
+
+    /* Hero text fix */
+    .hero h1 {
+        font-size: 2rem !important;
+        line-height: 1.2;
+    }
+
+    .hero p {
+        font-size: 1rem !important;
+    }
+
+    /* General fix */
+    body {
+        overflow-x: hidden;
+    }
+
+    * {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Login/Signup container fix */
+    .auth-container,
+    .login-container,
+    .signup-container,
+    .card,
+    .form-container {
+        width: 90% !important;
+        max-width: 90% !important;
+        margin: 20px auto !important;
+        padding: 20px !important;
+        border-radius: 16px !important;
+    }
+
+    /* Input fields fix */
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+        width: 100% !important;
+        font-size: 14px !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Button fix */
+    button,
+    .btn,
+    .login-btn,
+    .signup-btn {
+        width: 100% !important;
+        font-size: 14px !important;
+        padding: 12px !important;
+    }
+
+    /* Navbar fix */
+    .nav-links {
+        display: none !important;
+    }
+
+    /* Hero fix */
+    .hero h1 {
+        font-size: 2rem !important;
+    }
+
+    body {
+        overflow-x: hidden !important;
+    }
+
+    * {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
