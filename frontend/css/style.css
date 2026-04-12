@@ -1743,3 +1743,35 @@ body.text-large .btn-primary { font-size: 17px; }
     border: none;
     cursor: pointer;
 }
+@media (max-width: 768px) {
+    /* Password wrapper fix */
+    .password-wrapper,
+    .input-wrapper {
+        position: relative !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .password-wrapper input,
+    .input-wrapper input {
+        width: 100% !important;
+        padding-right: 50px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Eye button fix */
+    .eye-btn,
+    .password-toggle {
+        position: absolute !important;
+        right: 12px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        font-size: 18px !important;
+        padding: 0 !important;
+        z-index: 10 !important;
+    }
+}
