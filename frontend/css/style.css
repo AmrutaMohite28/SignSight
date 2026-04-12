@@ -1391,41 +1391,6 @@ body.text-large .btn-primary { font-size: 17px; }
         box-sizing: border-box !important;
     }
 }
-
-@media (max-width: 768px) {
-
-    /* ===== NAVBAR FIX ===== */
-    .navbar {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        padding: 12px 16px !important;
-        gap: 10px !important;
-    }
-
-    .nav-links {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        gap: 8px !important;
-        width: 100% !important;
-        align-items: center !important;
-    }
-
-    .nav-item {
-        font-size: 12px !important;
-        padding: 4px 6px !important;
-    }
-
-    .btn-login {
-        font-size: 11px !important;
-        padding: 6px 10px !important;
-    }
-
-    .btn-signup {
-        font-size: 11px !important;
-        padding: 6px 10px !important;
-    }
-
     /* ===== FOOTER FIX ===== */
     .footer-grid {
         display: flex !important;
@@ -1635,3 +1600,44 @@ body.text-large .btn-primary { font-size: 17px; }
         margin-left: auto !important;
     }
 }
+@media (max-width: 768px) {
+
+    /* Navbar layout */
+    .navbar {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 12px 16px !important;
+    }
+
+    /* Hide all nav links */
+    .nav-item {
+        display: none !important;
+    }
+
+    /* Hide signup button */
+    .btn-signup {
+        display: none !important;
+    }
+
+    /* Keep only login button */
+    .nav-links {
+        display: flex !important;
+        justify-content: flex-end !important;
+        width: auto !important;
+    }
+
+    .btn-login {
+        display: block !important;
+        font-size: 12px !important;
+        padding: 6px 14px !important;
+        white-space: nowrap !important;
+    }
+
+    /* Logo styling */
+    .logo {
+        font-size: 18px !important;
+    }
+}
+
