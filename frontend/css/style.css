@@ -1640,4 +1640,31 @@ body.text-large .btn-primary { font-size: 17px; }
         font-size: 18px !important;
     }
 }
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 45px; /* space for eye button */
+    box-sizing: border-box;
+}
+
+.eye-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    
+    font-size: 16px;
+    z-index: 10;
+}
+.eye-btn:hover {
+    opacity: 0.7;
+}
 
