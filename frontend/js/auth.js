@@ -126,10 +126,9 @@ auth.onAuthStateChanged((user) => {
 });
 
 async function loginWithGoogle() {
-    try {
-        const provider = new firebase.auth.GoogleAuthProvider();
-
-        const result = await auth.signInWithRedirect(provider)
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await auth.signInWithRedirect(provider);
+}
         const user = result.user;
 
         await db.collection('users').doc(user.uid).set({
