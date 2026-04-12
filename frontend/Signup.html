@@ -6,7 +6,7 @@
     <title>SignSight - Sign Up</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="auth-page">
     <div class="auth-container">
         <div class="auth-header">
             <h1>Sign<span>Sight</span></h1>
@@ -28,7 +28,7 @@
 
         <div class="divider">or register with email</div>
 
-        <form id="signupForm" onsubmit="handleSignup(event)">
+        <form id="signupForm">
             <div class="form-group">
                 <label for="fullName">Full Name</label>
                 <input 
@@ -100,8 +100,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
     
-    <script src="firebase-config.js"></script>
+    <script src="js/firebase-config.js"></script>
     <script src="js/auth.js"></script>
 
 </body>
 </html>
+
