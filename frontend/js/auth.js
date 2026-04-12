@@ -18,6 +18,14 @@ const db = firebase.firestore();
 
 console.log("✅ SignSight Firebase connected!");
 
+auth.getRedirectResult().then((result) => {
+    if (result && result.user) {
+        window.location.replace('dashboard.html');
+    }
+}).catch((error) => {
+    console.error('Redirect error:', error);
+});
+
 // ==========================================
 // 1. SIGNUP LOGIC
 // ==========================================
@@ -121,7 +129,7 @@ async function loginWithGoogle() {
     try {
         const provider = new firebase.auth.GoogleAuthProvider();
 
-        const result = await auth.signInWithPopup(provider);
+        const result = await auth.signInWithRedirect(provider)
         const user = result.user;
 
         await db.collection('users').doc(user.uid).set({
