@@ -409,9 +409,13 @@ body {
         font-size: 14px;
     }
 
+    /* ── SOS BUTTON ── */
     .sos-btn {
-        width: 70px;
-        height: 70px;
-        font-size: 18px;
+        width: 56px !important;
+        height: 56px !important;
+        font-size: 13px !important;
+        right: 14px !important;
+        bottom: 14px !important;
+        z-index: 100 !important;
     }
 }
