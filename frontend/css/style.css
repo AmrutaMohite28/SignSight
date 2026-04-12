@@ -1640,109 +1640,6 @@ body.text-large .btn-primary { font-size: 17px; }
         font-size: 18px !important;
     }
 }
-.password-wrapper {
-    position: relative;
-    width: 100%;
-}
-
-.password-wrapper input {
-    width: 100%;
-    padding-right: 45px; /* space for eye button */
-    box-sizing: border-box;
-}
-
-.eye-btn {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    
-    font-size: 16px;
-    z-index: 10;
-}
-.eye-btn:hover {
-    opacity: 0.7;
-}
-.password-wrapper {
-    position: relative;
-    width: 100%;
-}
-
-.password-wrapper input {
-    width: 100%;
-    padding-right: 50px; /* eye button space */
-}
-
-.eye-btn {
-    position: absolute;
-    right: 15px;   /* RIGHT ला आणतो */
-    top: 50%;
-    transform: translateY(-50%);
-    
-    background: none;
-    border: none;
-    cursor: pointer;
-    
-    font-size: 18px;
-    color: #aaa;
-}
-/* ===== FORCE FIX FOR EYE BUTTON ===== */
-
-.password-wrapper {
-    position: relative !important;
-    width: 100% !important;
-}
-
-.password-wrapper input {
-    width: 100% !important;
-    padding-right: 50px !important;
-}
-
-.eye-btn {
-    position: absolute !important;
-    right: 15px !important;
-    left: auto !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-
-    background: none !important;
-    border: none !important;
-    cursor: pointer !important;
-
-    font-size: 18px !important;
-    color: #aaa !important;
-    z-index: 999 !important;
-}
-
-/* REMOVE ANY CENTER ALIGN ISSUE */
-.password-wrapper,
-.input-wrapper {
-    display: block !important;
-}
-
-.password-wrapper {
-    position: relative;
-    width: 100%;
-}
-
-.password-wrapper input {
-    width: 100%;
-    padding-right: 50px;
-}
-
-.eye-btn {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-}
 @media (max-width: 768px) {
     /* Password wrapper fix */
     .password-wrapper,
@@ -1759,12 +1656,29 @@ body.text-large .btn-primary { font-size: 17px; }
         padding-right: 50px !important;
         box-sizing: border-box !important;
     }
+    @media (max-width: 768px) {
+    /* Input wrapper fix */
+    .input-wrapper,
+    .password-wrapper {
+        position: relative !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    /* Input field fix */
+    .input-wrapper input,
+    .password-wrapper input {
+        width: 100% !important;
+        padding-right: 50px !important;
+        box-sizing: border-box !important;
+    }
 
     /* Eye button fix */
-    .eye-btn,
-    .password-toggle {
+    .password-toggle,
+    .eye-btn {
         position: absolute !important;
-        right: 20px !important;
+        right: 12px !important;
         top: 50% !important;
         transform: translateY(-50%) !important;
         background: none !important;
@@ -1772,6 +1686,24 @@ body.text-large .btn-primary { font-size: 17px; }
         cursor: pointer !important;
         font-size: 18px !important;
         padding: 0 !important;
+        margin: 0 !important;
         z-index: 10 !important;
+        width: auto !important;
+        height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* Form group fix */
+    .form-group {
+        width: 100% !important;
+        margin-bottom: 16px !important;
+    }
+
+    .form-group label {
+        display: block !important;
+        margin-bottom: 6px !important;
+        font-size: 14px !important;
     }
 }
