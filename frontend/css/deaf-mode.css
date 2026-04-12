@@ -454,3 +454,145 @@ body {
     bottom: 18px;
   }
 }
+@media (max-width: 768px) {
+
+    /* Navbar fix */
+    .navbar {
+        flex-wrap: wrap !important;
+        padding: 10px !important;
+        gap: 8px !important;
+        height: auto !important;
+    }
+
+    .navbar-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .logo {
+        font-size: 18px !important;
+    }
+
+    /* Mode toggle buttons */
+    .mode-toggle-container {
+        width: 100% !important;
+        order: 3 !important;
+    }
+
+    .mode-toggle {
+        display: flex !important;
+        width: 100% !important;
+        gap: 6px !important;
+    }
+
+    .mode-btn {
+        flex: 1 !important;
+        font-size: 11px !important;
+        padding: 8px 4px !important;
+        white-space: nowrap !important;
+    }
+
+    /* Learning grid — stack vertically */
+    .learning-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    /* Camera section */
+    .camera-container {
+        width: 100% !important;
+        height: 280px !important;
+    }
+
+    .camera-controls {
+        display: flex !important;
+        gap: 8px !important;
+        margin-top: 8px !important;
+    }
+
+    .btn-camera,
+    .btn-speak {
+        flex: 1 !important;
+        font-size: 12px !important;
+        padding: 10px !important;
+    }
+
+    /* Guide card */
+    .guide-card {
+        padding: 12px !important;
+    }
+
+    .sign-image {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    /* Alphabet scroller */
+    .alphabet-scroller {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        justify-content: center !important;
+    }
+
+    .alphabet-btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 13px !important;
+        padding: 0 !important;
+    }
+
+    /* Stats dashboard */
+    .stats-dashboard {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    .stat-box {
+        padding: 12px !important;
+    }
+
+    .stat-value {
+        font-size: 16px !important;
+    }
+
+    /* Conversation mode */
+    .conv-middle-row {
+        flex-direction: column !important;
+    }
+
+    .conv-history-sidebar {
+        width: 100% !important;
+        max-height: 150px !important;
+        overflow-y: auto !important;
+    }
+
+    .conv-camera-box {
+        width: 100% !important;
+        height: 260px !important;
+    }
+
+    .conv-btn-row {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .btn-conv {
+        flex: 1 !important;
+        font-size: 12px !important;
+        padding: 10px !important;
+    }
+
+    /* SOS button */
+    .sos-btn {
+        width: 56px !important;
+        height: 56px !important;
+        font-size: 13px !important;
+        right: 14px !important;
+        bottom: 14px !important;
+    }
+}
