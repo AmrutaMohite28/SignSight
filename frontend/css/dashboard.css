@@ -439,4 +439,19 @@ body {
   }
 }
 
+/* ------- Extra-small devices ------- */
+@media (max-width: 400px) {
+  .brand-name {
+    font-size: 1rem;
+  }
+
+  .floating-card {
+    padding: 16px;
+  }
+
+  .card-info p {
+    line-height: 1.4;
+  }
+}
+
 
