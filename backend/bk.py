@@ -277,7 +277,7 @@ def keep_alive():
     while True:
         time.sleep(840)
         try:
-            requests.get("https://signsight-backend.onrender.com/api/health")
+            requests.get("https://signsight-7svw.onrender.com/api/health")
         except:
             pass
 
