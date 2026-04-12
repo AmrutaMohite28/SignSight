@@ -51,20 +51,15 @@
                 >
             </div>
 
-            <div class="form-group">
-                <label for="signupPassword">Password</label>
+           <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
                 <div class="input-wrapper">
-                    <input 
-                        type="password" 
-                        id="signupPassword" 
+                    <input type="password" id="confirmPassword"
                         placeholder="••••••••"
                         required
-                        minlength="6"
-                        aria-label="Password"
-                    >
-                    <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')" aria-label="Toggle password visibility">
-                        👁️
-                    </button>
+                        autocomplete="new-password">
+                    <button type="button" class="password-toggle"
+                        onclick="togglePassword('confirmPassword')">👁️</button>
                 </div>
             </div>
 
