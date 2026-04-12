@@ -1667,4 +1667,27 @@ body.text-large .btn-primary { font-size: 17px; }
 .eye-btn:hover {
     opacity: 0.7;
 }
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 50px; /* eye button space */
+}
+
+.eye-btn {
+    position: absolute;
+    right: 15px;   /* RIGHT ला आणतो */
+    top: 50%;
+    transform: translateY(-50%);
+    
+    background: none;
+    border: none;
+    cursor: pointer;
+    
+    font-size: 18px;
+    color: #aaa;
+}
 
