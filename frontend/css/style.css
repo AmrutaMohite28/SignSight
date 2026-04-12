@@ -1331,25 +1331,39 @@ body.text-large .btn-primary { font-size: 17px; }
 }
 
 @media (max-width: 768px) {
-    .hero-buttons,
-    .btn-group,
-    .cta-buttons {
+
+    /* Navbar fix */
+    .nav-links {
+        display: none !important;
+    }
+
+    /* Hero fix */
+    .hero h1 {
+        font-size: 1.8rem !important;
+    }
+
+    /* Buttons side by side fix */
+    .hero-btns {
         display: flex !important;
         flex-direction: row !important;
         gap: 10px !important;
-        flex-wrap: nowrap !important;
+        width: 100% !important;
     }
 
-    .hero-buttons button,
-    .hero-buttons a,
-    .btn-group button,
-    .btn-group a,
-    .cta-buttons button,
-    .cta-buttons a {
-        width: auto !important;
+    .btn-main, .btn-outline {
         flex: 1 !important;
         font-size: 13px !important;
-        padding: 10px 15px !important;
+        padding: 10px 12px !important;
         white-space: nowrap !important;
+        width: auto !important;
+    }
+
+    /* General overflow fix */
+    body {
+        overflow-x: hidden !important;
+    }
+
+    * {
+        box-sizing: border-box !important;
     }
 }
