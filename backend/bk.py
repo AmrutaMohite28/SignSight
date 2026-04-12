@@ -125,18 +125,20 @@ asl_recognizer = ASLRecognizer()
 net = None
 output_layers = []
 classes = []
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # YOLO Files Path
-YOLO_WEIGHTS = "yolov3-tiny.weights"
-YOLO_CFG = "yolov3-tiny.cfg"
-COCO_NAMES = "coco.names"
+YOLO_WEIGHTS = os.path.join(BASE_DIR, "yolov3-tiny.weights")
+YOLO_CFG = os.path.join(BASE_DIR, "yolov3-tiny.cfg")
+COCO_NAMES = os.path.join(BASE_DIR, "coco.names")
 
 # Load YOLO Model
 try:
     if os.path.exists(YOLO_WEIGHTS) and os.path.exists(YOLO_CFG):
         net = cv2.dnn.readNet(YOLO_WEIGHTS, YOLO_CFG)
         layer_names = net.getLayerNames()
-        output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
+        unconnected_layers = net.getUnconnectedOutLayers()
+        output_layers = [layer_names[int(i) - 1] for i in np.array(unconnected_layers).flatten()]
         
         if os.path.exists(COCO_NAMES):
             with open(COCO_NAMES, "r") as f:
@@ -166,6 +168,10 @@ def handle_disconnect():
 @socketio.on('video_frame')
 def handle_video_frame(data):
     try:
+        if hands is None:
+            emit('asl_result', {'letters': [], 'error': 'ASL model unavailable'}, broadcast=False)
+            return
+
         frame_data = data['frame'].split(',')[1]
         nparr = np.frombuffer(base64.b64decode(frame_data), np.uint8)
         frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -184,7 +190,8 @@ def handle_video_frame(data):
                 letter, confidence = asl_recognizer.recognize(landmarks)
                 if letter and confidence > 0.5:
                     recognized_letters.append({'letter': letter, 'confidence': float(confidence), 'hand': handedness.classification[0].label})
-                mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                if mp_drawing is not None and mp_hands is not None:
+                    mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
         
         ret, buffer = cv2.imencode('.jpg', frame)
         frame_base64 = base64.b64encode(buffer).decode()
@@ -281,7 +288,8 @@ def keep_alive():
             pass
 
 import threading
-threading.Thread(target=keep_alive, daemon=True).start()
+if os.environ.get("ENABLE_KEEP_ALIVE", "true").lower() == "true":
+    threading.Thread(target=keep_alive, daemon=True).start()
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
