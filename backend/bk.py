@@ -270,19 +270,19 @@ def health_check():
 @app.route('/api/asl-letters', methods=['GET'])
 def get_asl_letters():
     return jsonify({'letters': list(asl_recognizer.asl_patterns.keys())}), 200
-    
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    socketio.run(app, debug=False, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)
-    
+
 import threading, requests, time
 
 def keep_alive():
     while True:
-        time.sleep(840)  # 14 minutes
+        time.sleep(840)
         try:
-            requests.get("https://तुमचा-render-url.onrender.com/api/health")
+            requests.get("https://signsight-backend.onrender.com/api/health")
         except:
             pass
 
 threading.Thread(target=keep_alive, daemon=True).start()
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    socketio.run(app, debug=False, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)
