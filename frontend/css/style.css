@@ -1481,3 +1481,15 @@ body.text-large .btn-primary { font-size: 17px; }
         min-width: 0 !important;
     }
 }
+
+@media (max-width: 768px) {
+    .btn-signup {
+        display: none !important;
+    }
+
+    .btn-login {
+        width: auto !important;
+        font-size: 12px !important;
+        padding: 8px 16px !important;
+    }
+}
